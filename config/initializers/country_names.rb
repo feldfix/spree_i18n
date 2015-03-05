@@ -1,8 +1,8 @@
-require 'i18n_data'
+require 'iso3166'
 
 module I18n
   module Backend
-    class I18nDataBackend
+    class Countries
       module Implementation
         include Base, Flatten
 
@@ -12,7 +12,7 @@ module I18n
 
         def lookup(locale, key, scope=[], options={})
           begin
-            I18nData.countries(locale)[key]
+            ISO3166::Country.translations(locale)[key]
           rescue I18nData::NoTranslationAvailable
             # rescue failed lookup to fall back to this extensions locale files.
           end
@@ -24,7 +24,7 @@ module I18n
   end
 end
 
-I18n.backend = I18n::Backend::Chain.new(I18n::Backend::I18nDataBackend.new, I18n.backend)
+I18n.backend = I18n::Backend::Chain.new(I18n::Backend::Countries.new, I18n.backend)
 
 
 module I18nData
